@@ -1,0 +1,758 @@
+body {
+  margin: 0;
+  outline: 0;
+  background-color: #eceff1;
+  overflow-x: hidden;
+}
+
+body, input, button {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+div, input, button, form {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+input:not([type=submit]) {
+  font-size: 16px;
+}
+
+input[type=password] {
+  letter-spacing: 4px;
+  font-size: 20px;
+  color: #999;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button::-moz-focus-inner, select::-moz-focus-inner {
+  border: 0;
+}
+
+button, input {
+  outline: 0;
+}
+
+button:focus, input:focus {
+  -webkit-box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1976d2;
+          box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1976d2;
+}
+
+button:focus:active, button:active, input[type=button]:focus:active, input[type=button]:active, input[type=submit]:focus:active, input[type=submit]:active {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.app-container {
+  position: relative;
+  padding-top: 90px;
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  overflow: hidden;
+}
+
+.app-container > * {
+  -webkit-transition: opacity .3s ease;
+  transition: opacity .3s ease;
+}
+
+.app-container.loading {
+  background-image: url(images/ripple-large.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 120px 120px;
+}
+
+.app-container.loading > * {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-container.loading .round-header {
+  opacity: 0.4;
+  margin-top: 15vh;
+  text-transform: uppercase;
+}
+
+form, .modal .dialog {
+  display: block;
+  margin: 50px 8px;
+  min-width: 300px;
+  max-width: 80vw;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+form.loading, .modal .dialog.loading {
+  min-width: 200px;
+  min-height: 200px;
+  background-image: url(images/ripple-large.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 120px 120px;
+}
+
+form label, .modal .dialog label {
+  display: block;
+  max-width: 300px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 auto 8px;
+  color: #424242;
+  text-align: left;
+}
+
+form input, form button, .modal .dialog input, .modal .dialog button {
+  border-radius: 6px;
+  padding: 0 8px;
+  line-height: 36px;
+  margin: 0 auto 16px;
+  border: 0;
+}
+
+form input[type=text], form input[type=email], form input[type=password], .modal .dialog input[type=text], .modal .dialog input[type=email], .modal .dialog input[type=password] {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  outline: 0;
+}
+
+form input[type=text]:focus, form input[type=email]:focus, form input[type=password]:focus, .modal .dialog input[type=text]:focus, .modal .dialog input[type=email]:focus, .modal .dialog input[type=password]:focus {
+  border-color: #fff;
+}
+
+form input[type=submit], form button, .modal .dialog input[type=submit], .modal .dialog button {
+  background-color: #1976d2;
+  color: #fff;
+  line-height: 48px;
+  border-radius: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0 30px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+form a, .modal .dialog a {
+  display: inline-block;
+  color: #424242;
+  font-size: 0.8em;
+  text-decoration: none;
+  margin-left: 16px;
+}
+
+form a:hover, .modal .dialog a:hover {
+  text-decoration: underline;
+}
+
+form .error, .modal .dialog .error {
+  color: #f00;
+  font-size: 0.8em;
+  margin-top: 8px;
+}
+
+form .column-section, .modal .dialog .column-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 16px;
+}
+
+form .column-section > *, .modal .dialog .column-section > * {
+  margin: 16px;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em;
+  padding: 0;
+}
+
+.app-toolbar {
+  position: fixed;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #1976d2;
+  color: #fff;
+  width: 100%;
+  height: 60px;
+  z-index: 1;
+}
+
+.app-toolbar .header {
+  font-weight: bold;
+  padding: 0 20px;
+}
+
+.app-toolbar .user-profile {
+  display: none;
+  position: relative;
+  margin: 0 8px;
+  width: 40px;
+  height: 40px;
+}
+
+.app-toolbar .user-profile.active {
+  display: block;
+}
+
+.app-toolbar .user-profile.loading {
+  display: block;
+  background-image: url(images/ripple-small.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.app-toolbar .user-profile.loading .profile-icon, .app-toolbar .user-profile.loading .profile-menu {
+  opacity: 0;
+}
+
+.app-toolbar .user-profile .profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 0;
+  background-color: #1565c0;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  outline: 0;
+  cursor: pointer;
+}
+
+.app-toolbar .user-profile .profile-icon:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.app-toolbar .user-profile:focus-within .profile-icon {
+  background-color: #0d47a1;
+}
+
+.app-toolbar .user-profile .profile-menu {
+  position: absolute;
+  min-width: 240px;
+  background-color: #fff;
+  color: #424242;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 0;
+  display: none;
+  outline: 0;
+}
+
+.app-toolbar .user-profile .profile-menu .profile-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 16px 16px 8px;
+}
+
+.app-toolbar .user-profile .profile-menu .profile-card .profile-icon-large {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 25px;
+  border: 0;
+  background-color: #1565c0;
+  color: #fff;
+  text-align: center;
+  font-size: 25px;
+  margin-right: 8px;
+}
+
+.app-toolbar .user-profile .profile-menu .profile-name {
+  font-weight: bold;
+}
+
+.app-toolbar .user-profile .profile-menu .profile-username {
+  font-size: 0.75em;
+  color: #aaa;
+}
+
+.app-toolbar .user-profile .profile-menu hr {
+  margin: 0.5em;
+}
+
+.app-toolbar .user-profile .profile-menu a {
+  display: block;
+  padding: 0 16px;
+  line-height: 48px;
+  text-decoration: none;
+  color: #424242;
+  font-size: 0.9em;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.app-toolbar .user-profile .profile-menu a:hover, .app-toolbar .user-profile .profile-menu a:focus {
+  background-color: #ddd;
+}
+
+.app-toolbar .user-profile .profile-menu a.icon {
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  background-position: 12px center;
+  padding-left: 48px;
+}
+
+.app-toolbar .user-profile:focus-within .profile-menu {
+  display: block;
+}
+
+.icon-database {
+  background-image: url(images/database.png);
+}
+
+.icon-activity-feed {
+  background-image: url(images/activity-feed.png);
+}
+
+.icon-key {
+  background-image: url(images/key.png);
+}
+
+.icon-logout {
+  background-image: url(images/logout.png);
+}
+
+.icon-password {
+  background-image: url(images/password.png);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9;
+  overflow: auto;
+  padding-top: 50px;
+}
+
+.post {
+  padding: 0 8px;
+  width: 100%;
+  min-height: calc(100vh - 90px);
+  max-width: 600px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-line-pack: justify;
+      align-content: space-between;
+}
+
+.post nav {
+  padding: 8px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 48px 80px 48px auto;
+      grid-template-columns: 48px 80px 48px auto;
+}
+
+.post nav button {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: center;
+  color: #424242;
+  font-size: 28px;
+  outline: 0;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.post nav button:hover:not(:disabled) {
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.post nav button:disabled {
+  opacity: 0.2;
+}
+
+.post nav button.prev-post {
+  background-image: url(images/caret-up.png);
+}
+
+.post nav button.next-post {
+  background-image: url(images/caret-down.png);
+}
+
+.post nav button.current-post {
+  background-image: url(images/double-caret-down.png);
+}
+
+.post nav button.prev-round {
+  background-image: url(images/circle-caret-left.png);
+}
+
+.post nav button.next-round {
+  background-image: url(images/circle-caret-right.png);
+}
+
+.post nav .post-round {
+  color: #bbb;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  text-align: center;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.post nav .post-round span {
+  color: #666;
+}
+
+.post nav .post-navigation {
+  text-align: right;
+}
+
+.post .card {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  padding: 40px 50px;
+  margin: 0 16px 20px;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.post .card.animated {
+  -webkit-transition: left .2s ease, top .3s ease, opacity .2s ease;
+  transition: left .2s ease, top .3s ease, opacity .2s ease;
+  left: 0;
+  top: 0;
+  opacity: 1;
+}
+
+.post .card.animated.loading {
+  top: 50px;
+  opacity: 0;
+}
+
+.post .card.animated.loading.loading-alt {
+  top: -50px;
+}
+
+.post .card.animated.marked-true {
+  left: -100%;
+  opacity: 0;
+}
+
+.post .card.animated.marked-false {
+  left: 100%;
+  opacity: 0;
+}
+
+.post .post-count {
+  float: right;
+  color: #bbb;
+  font-size: 0.75em;
+}
+
+.post .post-count span {
+  color: #666;
+}
+
+.post .post-header {
+  line-height: 1.5;
+  position: relative;
+  margin: 50px 0;
+  text-align: center;
+}
+
+.post .label-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  margin-bottom: 90px;
+}
+
+.post .label-buttons button {
+  padding: 0 20px;
+  width: 50%;
+  max-width: 200px;
+  min-height: 48px;
+  margin: 0 4px;
+  border: 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 48px;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #ddd;
+  border-radius: 24px;
+  outline: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+
+.post .label-buttons button.red {
+  border-color: #d32f2f;
+  background-color: transparent;
+}
+
+.post .label-buttons button.red.selected, .post .label-buttons button.red:active {
+  background-color: #d32f2f;
+}
+
+.post .label-buttons button.green {
+  border-color: #388e3c;
+  background-color: transparent;
+}
+
+.post .label-buttons button.green.selected, .post .label-buttons button.green:active {
+  background-color: #388e3c;
+}
+
+.post .label-buttons button.selected, .post .label-buttons button:active {
+  color: #fff;
+}
+
+.post .label-buttons button:active, .post .label-buttons button:focus:active {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.post .label-buttons button:disabled {
+  opacity: 0.4;
+}
+
+.post .label-buttons button:disabled.green, .post .label-buttons button:disabled.red {
+  opacity: 1;
+}
+
+.user-card {
+  min-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  -webkit-box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.user-card .user-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 8px;
+}
+
+.user-card .user-header .user-name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-card .user-header .user-name b {
+  color: #424242;
+}
+
+.user-card .user-header .user-name span {
+  color: #aaa;
+  font-size: 0.75em;
+}
+
+.user-card .user-header .user-name span:before {
+  content: "\00a0\00a0";
+}
+
+.user-card .user-header .user-count {
+  color: #666;
+}
+
+.user-card .user-header .user-count:before {
+  content: "I alt\00a0\00a0";
+  color: #999;
+  font-size: 0.75em;
+}
+
+.user-card .user-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-card .user-info .user-round {
+  font-size: 1.2em;
+  width: 30px;
+}
+
+.user-card .user-info .user-progress {
+  width: 200px;
+  height: 2px;
+  font-size: 0.75em;
+  background-color: #bbdefb;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#1976d2));
+  background-image: linear-gradient(to bottom, #1976d2);
+  background-repeat: no-repeat;
+}
+
+.user-card .user-info .user-progress-percent {
+  font-size: 0.75em;
+  color: #1976d2;
+  margin-left: 8px;
+}
+
+.label-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 4px 8px;
+  margin-top: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.label-card .label-name {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75em;
+}
+
+.small-header {
+  font-size: 1em;
+  margin: 0;
+}
+
+.small-header + small {
+  display: block;
+  color: #999;
+  font-size: 0.75em;
+  margin-bottom: 16px;
+}

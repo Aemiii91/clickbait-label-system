@@ -1,0 +1,11 @@
+# Dependency directories
+node_modules/
+
+# Data images
+public/data/*/images
+
+# Database connection
+/db_connect.php
+
+# Image source files
+*.xar
