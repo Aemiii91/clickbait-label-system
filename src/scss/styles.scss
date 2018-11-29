@@ -317,6 +317,16 @@ hr {
                     background-position: 12px center;
                     padding-left: 48px;
                 }
+
+                & > kbd {
+                    float: right;
+                    font-size: 0.8em;
+
+                    kbd {
+                        font-family: Arial, Helvetica, sans-serif;
+                        margin: 0 2px;
+                    }
+                }
             }
         }
         

@@ -35,7 +35,7 @@ export class UserRenderer {
             menu.$el("hr");
 
             menu.$el("a.icon.icon-database", {
-                textContent: "Status", href: "#"
+                innerHTML: "Status <kbd><kbd>Ctrl</kbd>+<kbd>S</kbd></kbd>", href: "#", "data-hotkey": "control+s"
             }).on("click", event => {
                 this.app.renderer.overview.render(event);
             });

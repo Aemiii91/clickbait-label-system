@@ -353,6 +353,16 @@ hr {
   padding-left: 48px;
 }
 
+.app-toolbar .user-profile .profile-menu a > kbd {
+  float: right;
+  font-size: 0.8em;
+}
+
+.app-toolbar .user-profile .profile-menu a > kbd kbd {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0 2px;
+}
+
 .app-toolbar .user-profile:focus-within .profile-menu {
   display: block;
 }
