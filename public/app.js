@@ -932,8 +932,9 @@
   });
   var label_names = {
     "0": "Ikke-clickbait",
-    "0.33": "1/3 clickbait",
-    "0.67": "2/3 clickbait",
+    "0.33": "1/3",
+    "0.5": "50-50",
+    "0.67": "2/3",
     "1": "Clickbait"
   };
   var OverviewRenderer =
@@ -1004,13 +1005,25 @@
               });
             });
             var label_column = top_section.$el(".column.column-right");
-            label_column.$el("h1.small-header", {
-              textContent: "Bedømte overskrifter"
+            label_column.$el("h1", {
+              textContent: "Overskrifter"
             });
-            label_column.$el("small", {
-              textContent: "Antal overskrifter med 3 bedømmelser."
+            label_column.$el("h2", {
+              textContent: "3 vurderinger"
             });
             json.labels.forEach(function (label) {
+              var card = label_column.$el(".label-card");
+              card.$el(".label-name", {
+                textContent: label_names[label.key]
+              });
+              card.$el(".label-count", {
+                textContent: label.value
+              });
+            });
+            label_column.$el("h2", {
+              textContent: "2 vurderinger"
+            });
+            json.partials.forEach(function (label) {
               var card = label_column.$el(".label-card");
               card.$el(".label-name", {
                 textContent: label_names[label.key]

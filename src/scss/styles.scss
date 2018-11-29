@@ -177,6 +177,18 @@ form, .modal .dialog {
             margin: 16px;
         }
     }
+
+    h1 {
+        font-size: 1.2em;
+        margin: 0 0 8px;
+    }
+
+    h2 {
+        font-weight: normal;
+        color: #666;
+        font-size: 0.9em;
+        margin: 16px 0 8px;
+    }
 }
 
 
@@ -627,22 +639,11 @@ hr {
     margin-top: 4px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    min-width: 200px;
 
     .label-name {
         font-weight: bold;
         text-transform: uppercase;
         font-size: 0.75em;
-    }
-}
-
-.small-header {
-    font-size: 1em;
-    margin: 0;
-
-    & + small {
-        display: block;
-        color: #999;
-        font-size: 0.75em;
-        margin-bottom: 16px;
     }
 }

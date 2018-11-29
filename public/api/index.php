@@ -307,7 +307,7 @@ function get_overview($db) {
             ["key" => "1", "value" => 0],
         ];
         $label_order = ["0" => 0, "0.33" => 1, "0.67" => 2, "1" => 3];
-        $result = _get_verified_labels($db);
+        $result = _get_verified_labels($db, 3);
 
         while ($row = mysqli_fetch_assoc($result)) {
             $average = (string) round((float) $row["average"], 2);
@@ -315,6 +315,21 @@ function get_overview($db) {
         }
 
         $output->labels = $verified_labels;
+
+        $verified_labels = [
+            ["key" => "0", "value" => 0],
+            ["key" => "0.5", "value" => 0],
+            ["key" => "1", "value" => 0],
+        ];
+        $label_order = ["0" => 0, "0.5" => 1, "1" => 2];
+        $result = _get_verified_labels($db, 2);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $average = (string) round((float) $row["average"], 2);
+            $verified_labels[$label_order[$average]]["value"] = (int) $row["count"];
+        }
+
+        $output->partials = $verified_labels;
     }
 
     return $output;
@@ -343,8 +358,8 @@ function _get_round($db, $user_id) {
     return floor(_get_label_count($db, $user_id) / 90);
 }
 
-function _get_verified_labels($db) {
-    $sql = "SELECT average, COUNT(average) 'count' FROM (SELECT post_id, AVG(is_clickbait) 'average', COUNT(user_id) 'rater_count' FROM clickbait_labels GROUP BY post_id) label_scores WHERE `rater_count`=3 GROUP BY average";
+function _get_verified_labels($db, $rater_count) {
+    $sql = "SELECT average, COUNT(average) 'count' FROM (SELECT post_id, AVG(is_clickbait) 'average', COUNT(user_id) 'rater_count' FROM clickbait_labels GROUP BY post_id) label_scores WHERE `rater_count`=$rater_count GROUP BY average";
     return mysqli_query($db, $sql);
 }
 
