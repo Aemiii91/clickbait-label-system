@@ -274,7 +274,7 @@ export class PostsRenderer {
                 card.style.left = pos_circ.x + "px";
                 card.style.top = pos_circ.y + "px";
                 card.style.transform = `rotate(${rotation}deg)`;
-                card.style.opacity = (1 - Math.min(Math.abs(rotation), 15) / 15) * 0.8 + 0.2;
+                card.style.opacity = (1 - Math.min(Math.abs(rotation), max_rotation) / max_rotation) * 0.8 + 0.2;
     
                 event.preventDefault();
             }
