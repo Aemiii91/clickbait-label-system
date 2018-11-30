@@ -252,7 +252,7 @@ export class PostsRenderer {
     
             curr = { x: touch.clientX, y: touch.clientY };
             diff = { 
-                x: Math.max(-max, Math.min(curr.x - start.x, max)),
+                x: curr.x - start.x,
                 y: curr.y - start.y
             };
             
