@@ -411,9 +411,9 @@ hr {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 9;
   overflow: auto;
@@ -641,7 +641,7 @@ hr {
 }
 
 .user-card {
-  min-width: 300px;
+  min-width: 250px;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 8px 16px;
@@ -726,7 +726,7 @@ hr {
 }
 
 .user-card .user-info .user-progress {
-  width: 200px;
+  width: 180px;
   height: 2px;
   font-size: 0.75em;
   background-color: #bbdefb;
@@ -766,4 +766,57 @@ hr {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 0.75em;
+}
+
+.section-card {
+  min-width: 250px;
+  font-size: 0.7em;
+  white-space: nowrap;
+  line-height: 24px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30px (1fr)[5];
+      grid-template-columns: 30px repeat(5, 1fr);
+}
+
+.section-card .row-name {
+  font-weight: bold;
+}
+
+.section-card .section, .section-card .section-sum {
+  color: #666;
+  margin: 1px;
+  overflow: hidden;
+}
+
+.section-card .section {
+  background-color: #eee;
+}
+
+.section-card .section-sum {
+  color: #999;
+}
+
+.section-card.user-2 .section-1 {
+  -ms-grid-column: 3;
+  grid-column: 3;
+}
+
+.section-card.user-3 .section-1 {
+  -ms-grid-column: 4;
+  grid-column: 4;
+}
+
+.section-card.user-4 .section-2 {
+  -ms-grid-column: 5;
+  grid-column: 5;
+}
+
+.section-card.user-5 .section-3 {
+  -ms-grid-column: 6;
+  grid-column: 6;
+}
+
+.is-mobile kbd {
+  display: none;
 }

@@ -361,7 +361,7 @@ hr {
     left: 0; right: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-color: rgba(0,0,0,0.8);
     z-index: 9;
     overflow: auto;
@@ -556,7 +556,7 @@ hr {
 
 
 .user-card {
-    min-width: 300px;
+    min-width: 250px;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 8px 16px;
@@ -613,7 +613,7 @@ hr {
         }
 
         .user-progress {
-            width: 200px;
+            width: 180px;
             height: 2px;
             font-size: 0.75em;
             background-color: #bbdefb;
@@ -646,4 +646,40 @@ hr {
         text-transform: uppercase;
         font-size: 0.75em;
     }
+}
+
+.section-card {
+    min-width: 250px;
+    font-size: 0.7em;
+    white-space: nowrap;
+    line-height: 24px;
+    display: grid;
+    grid-template-columns: 30px repeat(5, 1fr);
+
+    .row-name {
+        font-weight: bold;
+    }
+
+    .section, .section-sum {
+        color: #666;
+        margin: 1px;
+        overflow: hidden;
+    }
+
+    .section {
+        background-color: #eee;
+    }
+
+    .section-sum {
+        color: #999;
+    }
+    
+    &.user-2 .section-1 { grid-column: 3; }
+    &.user-3 .section-1 { grid-column: 4; }
+    &.user-4 .section-2 { grid-column: 5; }
+    &.user-5 .section-3 { grid-column: 6; }
+}
+
+.is-mobile kbd {
+    display: none;
 }

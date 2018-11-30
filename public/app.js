@@ -974,6 +974,7 @@
             dialog.classList.remove("loading");
             dialog.innerHTML = "";
             var top_section = dialog.$el(".column-section");
+            var users_count = [];
             var users_column = top_section.$el(".column.column-left");
             json.users.forEach(function (user) {
               var card = users_column.$el(".user-card"),
@@ -990,6 +991,7 @@
               user_header.$el(".user-count", {
                 textContent: user.labeled
               });
+              users_count.push(user.labeled);
               var percent = user.labeled % 90 / 90 * 100;
               var user_info = card.$el(".user-info");
               user_info.$el(".user-round", {
@@ -1002,6 +1004,23 @@
               });
               user_info.$el(".user-progress-percent", {
                 textContent: Math.round(percent) + "%"
+              });
+            });
+            var section_column = top_section.$el(".column.column-middle");
+            section_column.$el("h1", {
+              textContent: "Sektionsdiagram"
+            });
+            users_count.forEach(function (count, index) {
+              var id = index + 1,
+                  card = section_column.$el(".section-card.user-" + id),
+                  s = _get_sections_count(count);
+              card.$el(".row-name", {
+                textContent: "# ".concat(id)
+              });
+              s.forEach(function (section_count, section_index) {
+                card.$el(".section.section-" + (section_index + 1), {
+                  textContent: "".concat(section_count)
+                });
               });
             });
             var label_column = top_section.$el(".column.column-right");
@@ -1060,6 +1079,17 @@
 
     return OverviewRenderer;
   }();
+
+  function _get_sections_count(count) {
+    var s = [0, 0, 0],
+        c = 0;
+
+    for (var i = count; i > 0; i -= 30) {
+      s[c > 2 && (c = 0) ? c++ : c++] += i > 30 ? 30 : i;
+    }
+
+    return s;
+  }
 
   var HistoryHandler =
   /*#__PURE__*/
@@ -1146,7 +1176,8 @@
       overview: new OverviewRenderer(this)
     }; // this makes the body element focusable
 
-    document.body.setAttribute("tabindex", "1"); // render basic application
+    document.body.setAttribute("tabindex", "1");
+    if (is_mobile()) document.body.classList.add("is-mobile"); // render basic application
 
     var toolbar = elementor(document.body).$el("#app_toolbar.app-toolbar");
     toolbar.$el("#page_title.header", {
@@ -1161,6 +1192,10 @@
   elementor(window).on("load", function () {
     new ClickbaitLabelApp();
   });
+
+  function is_mobile() {
+    return navigator.userAgent.match(/(android|webos|iphone|ipad|ipod|blackberry|windows phone)/i);
+  }
 
 }());
 //# sourceMappingURL=app.js.map

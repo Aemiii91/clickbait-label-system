@@ -45,6 +45,8 @@ export class OverviewRenderer {
 
                 var top_section = dialog.$el(".column-section");
 
+                var users_count = [];
+
                 var users_column = top_section.$el(".column.column-left");
                 json.users.forEach(user => {
                     var card = users_column.$el(".user-card"), time_since = "";
@@ -58,6 +60,8 @@ export class OverviewRenderer {
                     });
                     user_header.$el(".user-count", { textContent: user.labeled });
 
+                    users_count.push(user.labeled);
+
                     var percent = (user.labeled % 90) / 90 * 100;
 
                     var user_info = card.$el(".user-info");
@@ -68,6 +72,25 @@ export class OverviewRenderer {
                         }
                     });
                     user_info.$el(".user-progress-percent", { textContent: Math.round(percent) + "%" });
+                });
+
+                var section_column = top_section.$el(".column.column-middle");
+
+                section_column.$el("h1", { textContent: "Sektionsdiagram" });
+
+                var users_section_count = [];
+                users_count.forEach((count, index) => {
+                    var id = index + 1,
+                        card = section_column.$el(".section-card.user-" + id),
+                        s = _get_sections_count(count);
+
+                    users_section_count.push(s);
+
+                    card.$el(".row-name", { textContent: `# ${id}` });
+
+                    s.forEach((section_count, section_index) => {
+                        card.$el(".section.section-" + (section_index+1), { textContent: `${section_count}` });
+                    });
                 });
 
                 var label_column = top_section.$el(".column.column-right");
@@ -111,4 +134,25 @@ export class OverviewRenderer {
             event.preventDefault();
         }
     }
+}
+
+function _get_sections_count(count) {
+    var s = [0,0,0], c = 0;
+                    
+    for (var i = count; i > 0; i -= 30)
+        s[c>2 && (c=0) ? c++ : c++] += i>30 ? 30 : i;
+
+    return s;
+}
+
+function _get_sections_sums(u) {
+    var sums = [
+        u[0][0] + u[3][0] + u[4][0],
+        u[0][1] + u[1][0] + u[4][1],
+        u[0][2] + u[1][1] + u[2][0],
+        u[1][2] + u[2][1] + u[3][1],
+        u[2][2] + u[3][2] + u[4][2]
+    ];
+
+    return sums;
 }

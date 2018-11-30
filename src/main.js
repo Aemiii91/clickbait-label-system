@@ -31,6 +31,8 @@ class ClickbaitLabelApp {
         // this makes the body element focusable
         document.body.setAttribute("tabindex", "1");
 
+        if (is_mobile()) document.body.classList.add("is-mobile");
+
         // render basic application
         var toolbar = $get(document.body).$el("#app_toolbar.app-toolbar");
         toolbar.$el("#page_title.header", { textContent: document.title });
@@ -44,3 +46,7 @@ class ClickbaitLabelApp {
 }
 
 $get(window).on("load", () => { new ClickbaitLabelApp() });
+
+function is_mobile() {
+    return navigator.userAgent.match(/(android|webos|iphone|ipad|ipod|blackberry|windows phone)/i);
+}
