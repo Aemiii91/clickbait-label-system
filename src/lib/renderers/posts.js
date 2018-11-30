@@ -80,12 +80,12 @@ export class PostsRenderer {
         var nav_post = nav_round.$el(".post-navigation");
 
         // button: previous post
-        add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", "arrowleft", index > 0, () => {
+        add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", null, index > 0, () => {
             this.render(index-1);
         });
 
         // button: next post
-        add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", "arrowright", index < this.labeled && index < this.posts.length - 1, () => {
+        add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", null, index < this.labeled && index < this.posts.length - 1, () => {
             this.render(index+1);
         });
 
@@ -111,8 +111,9 @@ export class PostsRenderer {
         // button: label as clickbait
         label_buttons.$el("button#btn_mark_true.red" + (post.is_clickbait === 1 ? ".selected" : ""), {
             textContent: "Clickbait",
-            title: "Markér som clickbait ('C'-tast)",
-            "data-hotkey": "c"
+            title: "Markér som clickbait (Venstre Pil)",
+            "data-hotkey": "arrowleft",
+            "data-hotkey-alt": "c"
         }).on("click", () => {
             this.set_label(index, true);
         });
@@ -120,8 +121,9 @@ export class PostsRenderer {
         // button: label as non-clickbait
         label_buttons.$el("button#btn_mark_false.green" + (post.is_clickbait === 0 ? ".selected" : ""), {
             textContent: "Ikke-clickbait",
-            title: "Markér som ikke-clickbait ('I'-tast)",
-            "data-hotkey": "i"
+            title: "Markér som ikke-clickbait (Højre Pil)",
+            "data-hotkey": "arrowright",
+            "data-hotkey-alt": "i"
         }).on("click", () => {
             this.set_label(index, false);
         });
