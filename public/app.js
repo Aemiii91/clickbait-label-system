@@ -618,7 +618,7 @@
           innerHTML: "<span># ".concat(index + 1, "</span> / ").concat(this.posts.length)
         }); // add touch capabilities to card
 
-        card.on("touchstart", this.cardTouchHandler); // labeling controls container
+        card.on("touchstart", this.cardTouchHandler.bind(this)); // labeling controls container
 
         var label_buttons = article.$el(".label-buttons"); // button: label as clickbait
 

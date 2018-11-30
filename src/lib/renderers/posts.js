@@ -103,7 +103,7 @@ export class PostsRenderer {
         card.$el(".post-count", { innerHTML: `<span># ${index+1}</span> / ${this.posts.length}` });
 
         // add touch capabilities to card
-        card.on("touchstart", this.cardTouchHandler);
+        card.on("touchstart", this.cardTouchHandler.bind(this));
     
         // labeling controls container
         var label_buttons = article.$el(".label-buttons");
