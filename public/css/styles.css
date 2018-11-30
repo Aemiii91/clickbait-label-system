@@ -541,14 +541,21 @@ hr {
   top: -50px;
 }
 
+.post .card.animated.marked-true, .post .card.animated.marked-false {
+  top: 80px;
+  opacity: 0;
+}
+
 .post .card.animated.marked-true {
   left: -100%;
-  opacity: 0;
+  -webkit-transform: rotate(-15deg);
+          transform: rotate(-15deg);
 }
 
 .post .card.animated.marked-false {
   left: 100%;
-  opacity: 0;
+  -webkit-transform: rotate(15deg);
+          transform: rotate(15deg);
 }
 
 .post .post-count {

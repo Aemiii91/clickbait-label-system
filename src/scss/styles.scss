@@ -454,14 +454,19 @@ hr {
                 }
             }
 
+            &.marked-true, &.marked-false {
+                top: 80px;
+                opacity: 0;
+            }
+
             &.marked-true {
                 left: -100%;
-                opacity: 0;
+                transform: rotate(-15deg);
             }
     
             &.marked-false {
                 left: 100%;
-                opacity: 0;
+                transform: rotate(15deg);
             }
         }
     }
