@@ -577,35 +577,30 @@
 
         var nav_round = article.$el("nav.round-navigation"); // button: previous round
 
-        _add_nav_button(nav_round, "prev-round", "Forrige runde (PgUp)", "pageup", null, this.round > 0, function () {
+        add_nav_button(nav_round, "prev-round", "Forrige runde (PgUp)", "pageup", null, this.round > 0, function () {
           _this2.set_round(_this2.round - 1);
         });
-
         nav_round.$el(".post-round", {
           innerHTML: "<span>Runde ".concat(this.round + 1, "</span>")
         }); // button: next round
 
-        _add_nav_button(nav_round, "next-round", "Næste runde (PgDn)", "pagedown", null, this.round < this.round_current, function () {
+        add_nav_button(nav_round, "next-round", "Næste runde (PgDn)", "pagedown", null, this.round < this.round_current, function () {
           _this2.set_round(_this2.round + 1);
         }); // post navigation container
 
-
         var nav_post = nav_round.$el(".post-navigation"); // button: previous post
 
-        _add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", "arrowleft", index > 0, function () {
+        add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", "arrowleft", index > 0, function () {
           _this2.render(index - 1);
         }); // button: next post
 
-
-        _add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", "arrowright", index < this.labeled && index < this.posts.length - 1, function () {
+        add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", "arrowright", index < this.labeled && index < this.posts.length - 1, function () {
           _this2.render(index + 1);
         }); // button: current post
 
-
-        _add_nav_button(nav_post, "current-post", "Nuværende (Space)", "space", "end", index < this.labeled && index < this.posts.length - 1, function () {
+        add_nav_button(nav_post, "current-post", "Nuværende (Space)", "space", "end", index < this.labeled && index < this.posts.length - 1, function () {
           _this2.render(_this2.labeled);
         }); // post headline container
-
 
         var card = article.$el("#current_card.card.animated." + loading_class, {
           "data-is-clickbait": post.is_clickbait,
@@ -673,8 +668,7 @@
 
         var post = this.posts[index]; // add 'selected' class to labeling button
 
-        _deselect_mark_btns();
-
+        deselect_mark_btns();
         elementor("#btn_mark_" + (is_clickbait ? "true" : "false")).classList.add("selected"); // disable all button while loading
 
         elementor(["#app_container button"]).forEach(function (btn) {
@@ -720,6 +714,7 @@
 
         var card = elementor("#current_card"),
             touch = event.touches[0],
+            center = center_position(card),
             start = {
           x: touch.clientX,
           y: touch.clientY
@@ -730,17 +725,24 @@
           y: 0
         },
             max = card.offsetWidth,
+            radius = max * 3,
+            rotation = 0,
+            max_rotation = 12,
+            circ_pos_start = null,
             card_moving = false,
             is_clickbait = parseInt(card.getAttribute("data-is-clickbait")),
             index = parseInt(card.getAttribute("data-index")),
-            submit_ratio = 0.25;
+            submit_ratio = 0.5;
+        center.y -= radius;
+        circ_pos_start = position_to_circle(center, start);
 
-        var _cancel = function _cancel() {
+        var cancel = function cancel() {
           card.style.left = "";
+          card.style.top = "";
+          card.style.transform = "";
+          card.style.opacity = "";
           card.classList.add("animated");
-
-          _deselect_mark_btns();
-
+          deselect_mark_btns();
           if (is_clickbait === 1) elementor("#btn_mark_true").classList.add("selected");
           if (is_clickbait === 0) elementor("#btn_mark_false").classList.add("selected");
           card.off("touchmove").off("touchend").off("touchcancel");
@@ -760,27 +762,33 @@
 
           if (card_moving || Math.abs(diff.x) > 10) {
             card_moving = true;
+            deselect_mark_btns();
+            var circ_pos_curr = position_to_circle(center, curr),
+                pos_circ = null;
+            rotation = circ_pos_curr.d - circ_pos_start.d;
+            pos_circ = circular_position(rotation, radius);
 
-            _deselect_mark_btns();
-
-            if (Math.abs(diff.x) > max * submit_ratio) {
+            if (Math.abs(rotation) > max_rotation * submit_ratio) {
               elementor("#btn_mark_" + (diff.x < 0 ? "true" : "false")).classList.add("selected");
             }
 
-            card.style.left = diff.x + "px";
+            card.style.left = pos_circ.x + "px";
+            card.style.top = pos_circ.y + "px";
+            card.style.transform = "rotate(".concat(rotation, "deg)");
+            card.style.opacity = 1 - Math.abs(rotation) / max_rotation;
             event.preventDefault();
           } else if (Math.abs(diff.y) > 10) {
-            _cancel();
+            cancel();
           }
         });
         card.on("touchend", function () {
-          _cancel();
+          cancel();
 
-          if (Math.abs(diff.x) > max * submit_ratio) {
+          if (Math.abs(rotation) > max_rotation * submit_ratio) {
             _this4.set_label(index, diff.x < 0);
           }
         });
-        card.on("touchcancel", _cancel);
+        card.on("touchcancel", cancel);
       }
     }]);
 
@@ -798,7 +806,7 @@
    * @param {function} clickHandler 
    */
 
-  function _add_nav_button(container, className, title, hotkey, alt_hotkey, enabled, clickHandler) {
+  function add_nav_button(container, className, title, hotkey, alt_hotkey, enabled, clickHandler) {
     var btn = container.$el("button." + className, {
       title: title
     });
@@ -807,10 +815,42 @@
     if (enabled) btn.on("click", clickHandler);else btn.disabled = true;
   }
 
-  function _deselect_mark_btns() {
+  function deselect_mark_btns() {
     elementor("#btn_mark_true").classList.remove("selected");
     elementor("#btn_mark_false").classList.remove("selected");
   }
+
+  function center_position(el) {
+    var rect = el.getBoundingClientRect();
+    return {
+      x: rect.x + rect.width / 2,
+      y: rect.y + rect.height / 2
+    };
+  }
+
+  function circular_position(degrees, radius) {
+    return {
+      x: Math.sin(Math.rad(degrees)) * radius,
+      y: Math.cos(Math.rad(degrees)) * -radius + radius
+    };
+  }
+
+  function position_to_circle(center, p) {
+    var delta_x = p.x - center.x,
+        delta_y = p.y - center.y;
+    return {
+      d: Math.deg(Math.atan2(delta_x, delta_y)),
+      r: Math.sqrt(delta_x * delta_x + delta_y * delta_y)
+    };
+  }
+
+  Math.rad = function (degrees) {
+    return degrees * Math.PI / 180;
+  };
+
+  Math.deg = function (radians) {
+    return radians * (180 / Math.PI);
+  };
 
   var UserRenderer =
   /*#__PURE__*/

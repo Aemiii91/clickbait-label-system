@@ -523,8 +523,10 @@ hr {
 }
 
 .post .card.animated {
-  -webkit-transition: left .2s ease, top .3s ease, opacity .2s ease;
-  transition: left .2s ease, top .3s ease, opacity .2s ease;
+  -webkit-transition: left .2s ease, top .2s ease, opacity .2s ease, -webkit-transform .2s ease;
+  transition: left .2s ease, top .2s ease, opacity .2s ease, -webkit-transform .2s ease;
+  transition: left .2s ease, top .2s ease, opacity .2s ease, transform .2s ease;
+  transition: left .2s ease, top .2s ease, opacity .2s ease, transform .2s ease, -webkit-transform .2s ease;
   left: 0;
   top: 0;
   opacity: 1;

@@ -65,14 +65,14 @@ export class PostsRenderer {
         var nav_round = article.$el("nav.round-navigation");
 
         // button: previous round
-        _add_nav_button(nav_round, "prev-round", "Forrige runde (PgUp)", "pageup", null, this.round > 0, () => {
+        add_nav_button(nav_round, "prev-round", "Forrige runde (PgUp)", "pageup", null, this.round > 0, () => {
             this.set_round(this.round-1);
         });
         
         nav_round.$el(".post-round", { innerHTML: `<span>Runde ${this.round+1}</span>` });
 
         // button: next round
-        _add_nav_button(nav_round, "next-round", "Næste runde (PgDn)", "pagedown", null, this.round < this.round_current, () => {
+        add_nav_button(nav_round, "next-round", "Næste runde (PgDn)", "pagedown", null, this.round < this.round_current, () => {
             this.set_round(this.round+1);
         });
     
@@ -80,17 +80,17 @@ export class PostsRenderer {
         var nav_post = nav_round.$el(".post-navigation");
 
         // button: previous post
-        _add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", "arrowleft", index > 0, () => {
+        add_nav_button(nav_post, "prev-post", "Forrige (Pil-op)", "arrowup", "arrowleft", index > 0, () => {
             this.render(index-1);
         });
 
         // button: next post
-        _add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", "arrowright", index < this.labeled && index < this.posts.length - 1, () => {
+        add_nav_button(nav_post, "next-post", "Næste (Pil-ned)", "arrowdown", "arrowright", index < this.labeled && index < this.posts.length - 1, () => {
             this.render(index+1);
         });
 
         // button: current post
-        _add_nav_button(nav_post, "current-post", "Nuværende (Space)", "space", "end", index < this.labeled && index < this.posts.length - 1, () => {
+        add_nav_button(nav_post, "current-post", "Nuværende (Space)", "space", "end", index < this.labeled && index < this.posts.length - 1, () => {
             this.render(this.labeled);
         });
     
@@ -160,7 +160,7 @@ export class PostsRenderer {
         var post = this.posts[index];
     
         // add 'selected' class to labeling button
-        _deselect_mark_btns();
+        deselect_mark_btns();
         $get("#btn_mark_" + (is_clickbait ? "true" : "false")).classList.add("selected");
         
         // disable all button while loading
@@ -214,20 +214,31 @@ export class PostsRenderer {
     cardTouchHandler(event) {
         var card = $get("#current_card"),
             touch = event.touches[0],
+            center = center_position(card),
             start = { x: touch.clientX, y: touch.clientY },
             curr = start,
             diff = { x: 0, y: 0 },
             max = card.offsetWidth,
+            radius = max * 3,
+            rotation = 0,
+            max_rotation = 12,
+            circ_pos_start = null,
             card_moving = false,
             is_clickbait = parseInt(card.getAttribute("data-is-clickbait")),
             index = parseInt(card.getAttribute("data-index")),
-            submit_ratio = 0.25;
+            submit_ratio = 0.5;
+
+        center.y -= radius;
+        circ_pos_start = position_to_circle(center, start);
     
-        var _cancel = () => {
+        var cancel = () => {
             card.style.left = "";
+            card.style.top = "";
+            card.style.transform = "";
+            card.style.opacity = "";
             card.classList.add("animated");
     
-            _deselect_mark_btns();
+            deselect_mark_btns();
             if (is_clickbait === 1) $get("#btn_mark_true").classList.add("selected");
             if (is_clickbait === 0) $get("#btn_mark_false").classList.add("selected");
     
@@ -248,29 +259,38 @@ export class PostsRenderer {
             if (card_moving || Math.abs(diff.x) > 10) {
                 card_moving = true;
     
-                _deselect_mark_btns();
+                deselect_mark_btns();
     
-                if (Math.abs(diff.x) > max*submit_ratio) {
+                var circ_pos_curr = position_to_circle(center, curr),
+                    pos_circ = null;
+
+                rotation = circ_pos_curr.d - circ_pos_start.d;
+                pos_circ = circular_position(rotation, radius);   
+    
+                if (Math.abs(rotation) > max_rotation*submit_ratio) {
                     $get("#btn_mark_" + (diff.x<0 ? "true" : "false")).classList.add("selected");
                 }
-    
-                card.style.left = diff.x + "px";
+
+                card.style.left = pos_circ.x + "px";
+                card.style.top = pos_circ.y + "px";
+                card.style.transform = `rotate(${rotation}deg)`;
+                card.style.opacity = 1 - Math.abs(rotation)/max_rotation;
     
                 event.preventDefault();
             }
             else if (Math.abs(diff.y) > 10) {
-                _cancel();
+                cancel();
             }
         });
     
         card.on("touchend", () => {
-            _cancel();
-            if (Math.abs(diff.x) > max*submit_ratio) {
+            cancel();
+            if (Math.abs(rotation) > max_rotation*submit_ratio) {
                 this.set_label(index, diff.x<0);
             }
         });
     
-        card.on("touchcancel", _cancel);
+        card.on("touchcancel", cancel);
     }
 }
 
@@ -287,7 +307,7 @@ export class PostsRenderer {
  * @param {function} clickHandler 
  */
 
-function _add_nav_button(container, className, title, hotkey, alt_hotkey, enabled, clickHandler) {
+function add_nav_button(container, className, title, hotkey, alt_hotkey, enabled, clickHandler) {
     var btn = container.$el("button." + className, { title: title });
 
     if (hotkey)
@@ -302,7 +322,40 @@ function _add_nav_button(container, className, title, hotkey, alt_hotkey, enable
 }
 
 
-function _deselect_mark_btns() {
+function deselect_mark_btns() {
     $get("#btn_mark_true").classList.remove("selected");
     $get("#btn_mark_false").classList.remove("selected");
+}
+
+function center_position(el) {
+    var rect = el.getBoundingClientRect();
+    return {
+        x: rect.x + rect.width/2,
+        y: rect.y + rect.height/2
+    };
+}
+
+function circular_position(degrees, radius) {
+    return {
+        x: Math.sin(Math.rad(degrees)) * radius,
+        y: Math.cos(Math.rad(degrees)) * -radius + radius
+    };
+}
+
+function position_to_circle(center, p) {
+    var delta_x = p.x - center.x,
+        delta_y = p.y - center.y;
+
+    return {
+        d: Math.deg(Math.atan2(delta_x, delta_y)),
+        r: Math.sqrt(delta_x*delta_x + delta_y*delta_y)
+    }
+}
+
+Math.rad = degrees => {
+    return degrees * Math.PI / 180;
+};
+
+Math.deg = radians => {
+    return radians * (180 / Math.PI);
 }

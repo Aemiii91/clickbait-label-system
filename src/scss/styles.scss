@@ -441,7 +441,7 @@ hr {
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
         &.animated {
-            transition: left .2s ease, top .3s ease, opacity .2s ease;
+            transition: left .2s ease, top .2s ease, opacity .2s ease, transform .2s ease;
             left: 0; top: 0;
             opacity: 1;
 
