@@ -668,7 +668,8 @@
       value: function set_label(index, is_clickbait) {
         var _this3 = this;
 
-        var post = this.posts[index]; // add 'selected' class to labeling button
+        var post = this.posts[index],
+            first_time = post.is_clickbait == -1; // add 'selected' class to labeling button
 
         deselect_mark_btns();
         elementor("#btn_mark_" + (is_clickbait ? "true" : "false")).classList.add("selected"); // disable all button while loading
@@ -677,30 +678,28 @@
           btn.disabled = true;
         }); // add 'marked-true' or 'marked-false' to card, initiating going-out animation
 
-        elementor("#current_card").classList.add("marked-" + (is_clickbait ? "true" : "false")); // submit label choice
+        elementor("#current_card").classList.add("marked-" + (is_clickbait ? "true" : "false")); // if labeled for the first time, add to 'labeled' counter
+
+        if (first_time) this.labeled = Math.min(this.labeled + 1, this.posts.length); // submit label choice
 
         this.app.api.post("label", {
           post_id: post.id,
           is_clickbait: is_clickbait ? 1 : 0
         }).then(function (json) {
           if (json.status == "ok") {
-            // if labeled for the first time, add to 'labeled' counter
-            if (post.is_clickbait == -1) _this3.labeled = Math.min(_this3.labeled + 1, _this3.posts.length); // set label on post object
-
-            post.is_clickbait = is_clickbait ? 1 : 0; // render last post not labeled - or go to next round, timeout = animation to finish
-
-            clearTimeout(_this3.label_timer);
-            _this3.label_timer = setTimeout(function () {
-              if (index < _this3.posts.length - 1) _this3.render(_this3.labeled);else _this3.set_round(_this3.round + 1);
-            }, 300);
+            // set label on post object
+            post.is_clickbait = is_clickbait ? 1 : 0;
           } else {
-            // something went wrong on server - revert
-            elementor(["#app_container button"]).forEach(function (btn) {
-              btn.disabled = false;
-            });
-            elementor("#current_card").classList.remove("marked-" + (is_clickbait ? "true" : "false"));
+            if (first_time) _this3.labeled--; // something went wrong on server - logout
+
+            _this3.app.renderer.user.logout();
           }
-        });
+        }); // render last post not labeled - or go to next round, timeout = animation to finish
+
+        clearTimeout(this.label_timer);
+        this.label_timer = setTimeout(function () {
+          if (index < _this3.posts.length - 1) _this3.render(_this3.labeled);else _this3.set_round(_this3.round + 1);
+        }, 300);
       }
       /**
        * Enables card touch capabilities, ie. swipe left to mark as clickbait,

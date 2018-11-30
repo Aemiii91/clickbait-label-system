@@ -159,7 +159,8 @@ export class PostsRenderer {
      */
     
     set_label(index, is_clickbait) {
-        var post = this.posts[index];
+        var post = this.posts[index],
+            first_time = post.is_clickbait == -1;
     
         // add 'selected' class to labeling button
         deselect_mark_btns();
@@ -173,36 +174,34 @@ export class PostsRenderer {
         // add 'marked-true' or 'marked-false' to card, initiating going-out animation
         $get("#current_card").classList.add("marked-" + (is_clickbait ? "true" : "false"));
     
+        // if labeled for the first time, add to 'labeled' counter
+        if (first_time)
+            this.labeled = Math.min(this.labeled+1, this.posts.length);
+
         // submit label choice
         this.app.api.post("label", {
             post_id: post.id,
             is_clickbait: is_clickbait ? 1 : 0
         }).then(json => {
-            if (json.status == "ok") {
-                // if labeled for the first time, add to 'labeled' counter
-                if (post.is_clickbait == -1)
-                    this.labeled = Math.min(this.labeled+1, this.posts.length);
-    
+            if (json.status == "ok") {    
                 // set label on post object
                 post.is_clickbait = is_clickbait ? 1 : 0;
-    
-                // render last post not labeled - or go to next round, timeout = animation to finish
-                clearTimeout(this.label_timer);
-                this.label_timer = setTimeout(() => {
-                    if (index < this.posts.length-1)
-                        this.render(this.labeled);
-                    else
-                        this.set_round(this.round+1);
-                }, 300);
             }
             else {
-                // something went wrong on server - revert
-                $get(["#app_container button"]).forEach(btn => {
-                    btn.disabled = false;
-                });
-                $get("#current_card").classList.remove("marked-" + (is_clickbait ? "true" : "false"));
+                if (first_time) this.labeled--;
+                // something went wrong on server - logout
+                this.app.renderer.user.logout();
             }
         });
+
+        // render last post not labeled - or go to next round, timeout = animation to finish
+        clearTimeout(this.label_timer);
+        this.label_timer = setTimeout(() => {
+            if (index < this.posts.length-1)
+                this.render(this.labeled);
+            else
+                this.set_round(this.round+1);
+        }, 300);
     }
 
 
